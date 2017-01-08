@@ -19,18 +19,20 @@ exports.getBankDetails = getBankDetails;
 
 
 ////////////////////////////////////////////////////////////////////////
-//                          APIs                                      //
+//                          Middlewares                               //
 ////////////////////////////////////////////////////////////////////////
 function getBankDetails(req,res, next){
     var ifscRegex = /^[A-Za-z]{4}\d{7}$/;
 
-
+    var ifsc = req.url.split('/');
+    if(ifsc.length != 2){
+        return next();
+    }
+    ifsc = ifsc[1];
     if(!ifscRegex.test(req.url.slice(-10))){
         return next();
     }
 
-
-    var ifsc = req.url.slice(-10);
     if(!ifsc){
         return res.send({});
     }
@@ -42,7 +44,7 @@ function getBankDetails(req,res, next){
     })().catch((error) => {
         response = {
             flag : 404,
-            message : error.message
+            message : "Please try again later."
         };
         return response;
     }).then((response) => {
@@ -50,7 +52,7 @@ function getBankDetails(req,res, next){
     });
     function getBankDetails(code){
         return new Promise( (resolve,reject) => {
-            var stmt = " SELECT a.ifsc , b.bank_name as name, a.address, a.micr, a.city,a.district, a.state , " +
+            var stmt = " SELECT a.ifsc , b.bank_name as name, a.address, a.micr, a.city,a.district, a.state  " +
                 " FROM tb_bank_details a JOIN tb_banks  b ON a.bank_id = b.id AND a.ifsc = ?" ;
 
             var queryObj = {
@@ -67,6 +69,9 @@ function getBankDetails(req,res, next){
             });
         });
     }
-
 }
+
+////////////////////////////////////////////////////////////////////////
+//                          APIs                                      //
+////////////////////////////////////////////////////////////////////////
 

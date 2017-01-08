@@ -2,7 +2,6 @@
 //                          Modules                                   //
 ////////////////////////////////////////////////////////////////////////
 var express        = require('express');
-var path           = require('path');
 var logger         = require('morgan');
 var cookieParser   = require('cookie-parser');
 var bodyParser     = require('body-parser');
@@ -16,7 +15,7 @@ var index          = require('./routes/index');
 var config         = require('config');
 var processor      = require('./routes/processor');
 
-var app            = express();
+var app            = express();// app init
 
 ////////////////////////////////////////////////////////////////////////
 //                          App configuration                         //
@@ -30,8 +29,13 @@ app.post('/ping',         function (req, res) {
     res.send(200, {}, { pong: true });
 });
 
-app.use(processor.getBankDetails);
+app.use(processor.getBankDetails);//middleware for dynamic ifsc code processing
 
+
+
+////////////////////////////////////////////////////////////////////////
+//                          Server configuration                      //
+////////////////////////////////////////////////////////////////////////
 
 httpServer = http.createServer(app).listen(config.get('httpPort'), function() {
     console.log('Express HTTP server listening on port ' + config.get('httpPort'));
