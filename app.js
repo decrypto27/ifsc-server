@@ -14,6 +14,7 @@ var http           = require('http');
 ////////////////////////////////////////////////////////////////////////
 var index          = require('./routes/index');
 var config         = require('config');
+var processor      = require('./routes/processor');
 
 var app            = express();
 
@@ -29,14 +30,9 @@ app.post('/ping',         function (req, res) {
     res.send(200, {}, { pong: true });
 });
 
-app.use('/',       index);
+app.use(processor.getBankDetails);
 
 
-app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
-});
 httpServer = http.createServer(app).listen(config.get('httpPort'), function() {
     console.log('Express HTTP server listening on port ' + config.get('httpPort'));
 });

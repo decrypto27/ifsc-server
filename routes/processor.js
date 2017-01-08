@@ -21,8 +21,16 @@ exports.getBankDetails = getBankDetails;
 ////////////////////////////////////////////////////////////////////////
 //                          APIs                                      //
 ////////////////////////////////////////////////////////////////////////
-function getBankDetails(req,res){
-    var ifsc = req.query;
+function getBankDetails(req,res, next){
+    var ifscRegex = /^[A-Za-z]{4}\d{7}$/;
+
+
+    if(!ifscRegex.test(req.url.slice(-10))){
+        return next();
+    }
+
+
+    var ifsc = req.url.slice(-10);
     if(!ifsc){
         return res.send({});
     }
@@ -49,7 +57,7 @@ function getBankDetails(req,res){
                 stmt: stmt,
                 args: [code]
             };
-            dbManager.runQuery(handlerInfo, queryObj).then((result) => {
+            dbManager.runQuery(queryObj).then((result) => {
                 if(!result.length){
                     return reject(new Error('No such bank exists with the given IFSC'));
                 }
