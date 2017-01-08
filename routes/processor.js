@@ -29,7 +29,7 @@ function getBankDetails(req,res, next){
         return next();
     }
     ifsc = ifsc[1];
-    if(!ifscRegex.test(req.url.slice(-10))){
+    if(!ifscRegex.test(ifsc)){
         return next();
     }
 
