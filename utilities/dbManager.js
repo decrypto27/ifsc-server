@@ -3,15 +3,15 @@ var Promise  = require('bluebird');
 var pool     = mysql.createPool({
   connectionLimit : 10,
   host            : 'localhost',
-  user            : 'vijayattri',
-  password        : 'itsnotasecret',
-  database        : 'bankdb'
+  user            : 'vijay',
+  password        : 'goalvijay',
+  database        : 'mysql'
 });
 
 var dbManager = {
     runQuery : function(queryObj){
       return new Promise((resolve, reject) => {
-            pool.query(queryObj.stmnt, queryObj.args, (err, result) => {
+            pool.query(queryObj.stmt, queryObj.args, (err, result) => {
               if(err ){
                 return reject(err);
               }
