@@ -3,8 +3,8 @@ var router = express.Router();
 
 var processor = require('./processor');
 //
-// // router.post('/is_valid_ifsc',    processor.isValidIfsc);
-// router.post('/get_bank_address', processor.getBankAddress);
-
-router.get('/*',                  processor.getBankDetails);
+router.post('/micr/:code',            processor.getBankMicr);
+router.post('/address/:code',         processor.getBankAddress);
+router.get('/:code',                  processor.getBankDetails);
+router.get('/image/:code',            processor.getBankImage);
 module.exports = router;

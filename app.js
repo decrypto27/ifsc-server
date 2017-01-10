@@ -28,11 +28,7 @@ app.use(cookieParser());
 app.post('/ping',         function (req, res) {
     res.send(200, {}, { pong: true });
 });
-
-app.use(processor.getBankDetails);//middleware for dynamic ifsc code processing
-
-
-
+app.use(processor.ifscValidator);
 ////////////////////////////////////////////////////////////////////////
 //                          Server configuration                      //
 ////////////////////////////////////////////////////////////////////////
