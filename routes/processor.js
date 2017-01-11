@@ -33,7 +33,10 @@ function ifscValidator(req, res, next){
     var ifscRegex = /^[A-Za-z]{4}\d{7}$/;
 
     if( !ifsc || !ifscRegex.test(ifsc) ){
-        return res.send({"No such bank was found.Please try again with some other ifsc."});
+        return res.send({
+            status  : "FAILURE",
+            message : "No such bank was found.Please try again with some other ifsc."
+        });
     }
     next();
 }
@@ -49,11 +52,14 @@ function getBankDetails(req,res){
     var response = {};
     Promise.coroutine( function * (){
         var bankInfo = yield getBankDetails(ifsc);
-        response = bankInfo[0];
+        response = {
+            status : "SUCCESS",
+            info : bankInfo[0]
+        };
         return response;
     })().catch((error) => {
         response = {
-            flag : 404,
+            status : "FAILURE",
             message : "Please try again later."
         };
         return response;
@@ -98,11 +104,14 @@ function processRequestsInternal(req,res,params){
     var response = {};
     Promise.coroutine( function * (){
         var bankInfo = yield getDetailsInternal(ifsc, params);
-        response = bankInfo[0];
+        response = {
+            status : "SUCCESS",
+            info : bankInfo[0]
+        };
         return response;
     })().catch((error) => {
         response = {
-            flag : 404,
+            status  : "FAILURE",
             message : "Please try again later."
         };
         return response;
