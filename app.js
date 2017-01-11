@@ -28,7 +28,6 @@ app.use(cookieParser());
 app.post('/ping',         function (req, res) {
     res.send(200, {}, { pong: true });
 });
-app.use(processor.ifscValidator);
 ////////////////////////////////////////////////////////////////////////
 //                          Server configuration                      //
 ////////////////////////////////////////////////////////////////////////
