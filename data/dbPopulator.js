@@ -28,7 +28,7 @@ function readWrapper(filePath , resultWrapper, callback){
         if(err){
             return callback(err);
         }
-        console.log(data);
+        console.log(data.toString());
         resultWrapper.data = data;
         return callback(null);
     });
@@ -55,8 +55,10 @@ function inserter(data){
             args: [data]
         };
         dbManager.runQuery(queryObj).then((result) => {
+            console.log('here')
             resolve(result);
         }, (error) => {
+            console.log(error.message);
             reject(error);
         });
     });
