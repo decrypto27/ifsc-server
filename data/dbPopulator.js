@@ -8,28 +8,37 @@ var async       = require('async');
 var dbManager        = require('../utilities/dbManager');
 
 
-async.forEachSeries(Object.keys(bankInfo), function(item,callback){
+async.forEachSeries(Object.keys(bankInfo), function(item,callback) {
     var resultWrapper = {};
-    var filePath = path.resolve(__dirname, item.toString() +'.json')
+    var filePath = path.resolve(__dirname, item.toString() + '.json')
     var tasks = [
-        readWrapper.bind(null,filePath,resultWrapper),
+        readWrapper.bind(null, filePath, resultWrapper),
         batchInserter.bind(null, resultWrapper)
     ];
-    async.series(tasks, function(error){
-        if(error){
+    async.series(tasks, function (error) {
+        if (error) {
             return callback(error);
         }
         console.log('all insertions done')
         return callback(null);
     })
+}, function(error) {
+    if(error){
+        console.log('Something went wrong . Please try again later.');
+        return;
+    }
+    console.log('All the insertions have been done');
+
 });
 function readWrapper(filePath , resultWrapper, callback){
-    fs.readFile(filePath, function(err,data){
+    fs.readFile(filePath, 'utf8',function(err,data){
         if(err){
             return callback(err);
         }
-        console.log(data.toString());
-        resultWrapper.data = data;
+	console.log(typeof data);
+//        console.log(data.toString());
+        resultWrapper.data = JSON.parse(data);
+        console.log(resultWrapper.data.length);
         return callback(null);
     });
 }
@@ -46,7 +55,7 @@ function batchInserter(wrapper, cb){
 }
 
 function inserter(data){
-
+    delete data.bank_code;
     return new Promise( (resolve,reject) => {
         var stmt = " INSERT INTO tb_bank_details SET ?" ;
 
@@ -55,10 +64,9 @@ function inserter(data){
             args: [data]
         };
         dbManager.runQuery(queryObj).then((result) => {
-            console.log('here')
+
             resolve(result);
         }, (error) => {
-            console.log(error.message);
             reject(error);
         });
     });
