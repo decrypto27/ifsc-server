@@ -1,4 +1,4 @@
 {
   "port": 4099,
-  "httpPort": 2793
+  "httpPort": 80
 }

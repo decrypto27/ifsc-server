@@ -5,40 +5,83 @@ A cron is also included that syncs the data with rbi in case there are any chang
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+These instructions will show how to service the given APIs.
+If you want to run the server on local system , first run script.js and then dbPopulator.js
+to construct the database (they will scrape the RBI webpages and populate the db).
 
 ### Usage
 If you just want to run it onto your local machine, just clone the project.
 The syncing script is included as script.js.
 
+##APIs
 
-```
-Coming soon
-```
+The project is currently hosted on **http://www.paywithupi.in**
 
-## Deployment
-If you are just servicing the APIs,
-just see the snippets-
+For fetching all the details corresponding to a given ifsc code, just do :
 ```
-Coming soon
+curl -X GET  "http://www.paywithupi.in/HDFC0000459"
 ```
 
+The result will be displayed as :
 
+```
+{
+  "status": "SUCCESS",
+  "info": {
+    "ifsc": "HDFC0000459",
+    "name": "HDFC Bank Ltd",
+    "address": "MUNICIPAL NO. 3641/41,AGRA CHOWK , G T ROAD,PALWAL.PALWAL,HARYANA - 121102",
+    "micr": "110240069",
+    "city": "PALWAL",
+    "district": "FARIDABAD",
+    "state": "HARYANA"
+  }
+}
+```
+For fetching the address corresponding to a given ifsc code, just do :
+```
+curl -X GET  "http://www.paywithupi.in/address/HDFC0000459"
+```
 
-If you want to run it onto your local system,
-Just go to the project directory --
-  With pm2 , just do
+The result will be displayed as :
+
 ```
-pm2 start app.js --name "*your instance name*"
+{
+  "status": "SUCCESS",
+  "info": {
+    "address": "MUNICIPAL NO. 3641/41,AGRA CHOWK , G T ROAD,PALWAL.PALWALHARYANA121102"
+  }
+}
 ```
-Or else
+For fetching the micr corresponding to a given ifsc code, just do :
 ```
-node app
+curl -X GET  "http://www.paywithupi.in/micr/HDFC0000459"
 ```
 
-## Contributing
+The result will be displayed as :
 
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
+```
+{
+  "status": "SUCCESS",
+  "info": {
+    "micr": "110240069"
+  }
+}
+```
+In case the ifsc is invalid in any of the given requests, like
+```
+curl -X GET  "http://www.paywithupi.in/Something-wrong-here"
+```
+
+The result will be displayed as :
+
+```
+{
+  "status": "FAILURE",
+  "message": "No such bank was found.Please try again with some other ifsc."
+}
+```
+
 
 ## Versioning
 
@@ -51,5 +94,5 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
 

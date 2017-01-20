@@ -11,7 +11,6 @@ var http           = require('http');
 ////////////////////////////////////////////////////////////////////////
 //                          Dependencies                              //
 ////////////////////////////////////////////////////////////////////////
-var index          = require('./routes/index');
 var config         = require('config');
 var processor      = require('./routes/processor');
 

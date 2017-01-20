@@ -120,9 +120,7 @@ function processRequestsInternal(req,res,params){
     });
 }
 
-function getDetailsInternal(paramObj){
-    var requiredParams = paramObj.requiredParam;
-    var code = paramObj.ifsc;
+function getDetailsInternal(code, requiredParams){
 
     return new Promise( (resolve,reject) => {
         var stmt = " SELECT a." + requiredParams + "  " +
