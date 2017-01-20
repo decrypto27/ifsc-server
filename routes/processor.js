@@ -58,6 +58,13 @@ function getBankDetails(req,res){
         };
         return response;
     })().catch((error) => {
+        if(error.code == 'ER_NO_DATA'){
+            response = {
+                status : "FAILURE",
+                message : "Invalid ifsc code"
+            };
+            return response;
+        }
         response = {
             status : "FAILURE",
             message : "Please try again later."
@@ -77,7 +84,9 @@ function getBankDetails(req,res){
             };
             dbManager.runQuery(queryObj).then((result) => {
                 if(!result.length){
-                    return reject(new Error('No such bank exists with the given IFSC'));
+                    var error = new Error('No such bank exists with the given IFSC');
+                    error.code = "ER_NO_DATA";
+                    return reject(error);
                 }
                 resolve(result);
             }, (error) => {
@@ -110,6 +119,13 @@ function processRequestsInternal(req,res,params){
         };
         return response;
     })().catch((error) => {
+        if(error.code == 'ER_NO_DATA'){
+            response = {
+                status : "FAILURE",
+                message : "Invalid ifsc code"
+            };
+            return response;
+        }
         response = {
             status  : "FAILURE",
             message : "Please try again later."
@@ -132,7 +148,9 @@ function getDetailsInternal(code, requiredParams){
         };
         dbManager.runQuery(queryObj).then((result) => {
             if(!result.length){
-                return reject(new Error('No such bank exists with the given IFSC'));
+                var error = new Error('No data found');
+                error.code = "ER_NO_DATA";
+                return reject(error);
             }
             resolve(result);
         }, (error) => {
