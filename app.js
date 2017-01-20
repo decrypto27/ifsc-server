@@ -25,6 +25,13 @@ app.use(bodyParser.json({limit: '2mb'}));
 app.use(bodyParser.urlencoded({limit: '1mb', extended: true}));
 app.use(cookieParser());
 
+
+app.get('/micr/:code',           processor.ifscValidator ,   processor.getBankMicr);
+app.get('/address/:code',        processor.ifscValidator ,   processor.getBankAddress);
+app.get('/:code',                processor.ifscValidator ,   processor.getBankDetails);
+app.get('/image/:code',          processor.ifscValidator ,   processor.getBankImage);
+
+
 app.post('/ping',         function (req, res) {
     res.send(200, {}, { pong: true });
 });

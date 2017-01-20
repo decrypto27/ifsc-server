@@ -1,6 +1,6 @@
 var Promise     = require('bluebird');
 var request     = require('request');
-var bankInfo    = require('../urlmappings.json');
+var bankInfo    = require('../data/urlmappings.json');
 var fs          = require('fs');
 var https       = require('https');
 var path        = require('path');
@@ -65,9 +65,9 @@ function inserter(data){
         };
         dbManager.runQuery(queryObj).then((result) => {
 
-            resolve(result);
+            resolve(null);
         }, (error) => {
-            reject(error);
+            resolve(null);
         });
     });
 }

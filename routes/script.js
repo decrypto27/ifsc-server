@@ -1,7 +1,6 @@
 
-var Promise     = require('bluebird');
 var request     = require('request');
-var bankInfo    = require('./urlmappings.json');
+var bankInfo    = require('../data/urlmappings.json');
 var fs          = require('fs');
 var https       = require('https');
 var path        = require('path');
@@ -41,12 +40,12 @@ function constructJSON(filePath, callback){// i made this because i was fed up o
 
 function processCodeInternal(code, resultWrapper, callback){
 
-    var file = fs.createWriteStream(path.resolve(__dirname, code.toString() +'.xls'));
+    var file = fs.createWriteStream(path.resolve('../data', code.toString() +'.xls'));
     getXls(file,code, function(error) {
         if (error) {
             return callback(error);
         }
-        constructJSON(path.resolve(__dirname , code.toString() + '.xls'),function (err, result) {
+        constructJSON(path.resolve('../data' , code.toString() + '.xls'),function (err, result) {
             if (err) {
                 callback(err);
             }
@@ -66,8 +65,8 @@ function processCodeInternal(code, resultWrapper, callback){
 
 async.forEachSeries(Object.keys(bankInfo), function(item,callback) {
     var resultWrapper = {};
-    var filePath    = path.resolve(__dirname , item.toString() + '.json');
-    var filePathXls = path.resolve(__dirname , item.toString() + '.xls');
+    var filePath    = path.resolve('../data'  , item.toString() + '.json');
+    var filePathXls = path.resolve('../data'  , item.toString() + '.xls');
     var tasks = [
         processCodeInternal.bind(null,item,resultWrapper),
         writerWrapper.bind(null, filePath,resultWrapper),
@@ -105,7 +104,7 @@ function getXls(file,code, callback){
             setTimeout(function(){callback(null)},200);
         }).on('error',function(error){
             if(error.code == 'ECONNRESET'){
-                return setTimeout(function(){ getXls(file, code, callback)}, 500);// you can vary this
+                return setTimeout(function(){ getXls(file, code, callback)}, 5000);// you can vary this
             }
             return callback(error);
         })

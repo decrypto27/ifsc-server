@@ -14,7 +14,7 @@ var pool     = mysql.createPool({
   connectionLimit : 10,
   host            : 'localhost',
   user            : 'vijay',
-  password        : 'goalvijay',
+  password        : 'ifscserver',
   database        : 'mysql'
 });
 
